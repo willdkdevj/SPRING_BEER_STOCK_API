@@ -3,7 +3,6 @@ package br.com.supernova.beerstock.controller;
 import java.util.List;
 
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 import br.com.supernova.beerstock.dto.BeerDTO;
 import br.com.supernova.beerstock.dto.QuantityDTO;
@@ -15,19 +14,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.HttpStatus;
 
+import br.com.supernova.beerstock.exception.BeerAlreadyRegisteredException;
+import br.com.supernova.beerstock.exception.BeerNotFoundException;
+import br.com.supernova.beerstock.exception.BeerStockExceededException;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import br.com.supernova.beerstock.exception.BeerAlreadyRegisteredException;
-import br.com.supernova.beerstock.exception.BeerNotFoundException;
-import br.com.supernova.beerstock.exception.BeerStockExceededException;
 
 @RestController
 @RequestMapping("/api/v1/beers")
@@ -68,4 +67,8 @@ public class BeerController implements BeerControllerDocs {
 		beerService.deleteById(id);
 	}
 
+	@PutMapping("/{id}/up")
+	public BeerDTO updateBeer(@PathVariable Long id, @RequestBody @Valid BeerDTO beerDTO) throws BeerNotFoundException {
+		return beerService.updateBeer(id, beerDTO);
+	}
 }

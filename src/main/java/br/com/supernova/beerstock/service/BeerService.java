@@ -59,18 +59,6 @@ public class BeerService {
 		checkIfExists(id);
 		beerRepository.deleteById(id);
 	}
-	
-	private void checkIfThereIsaRecord(String nameBeer) throws BeerAlreadyRegisteredException {
-		Optional<Beer> optSavedBeer = beerRepository.findByName(nameBeer);
-		if(optSavedBeer.isPresent()){
-			throw new BeerAlreadyRegisteredException(nameBeer);
-		}
-	}
-	
-	private Beer checkIfExists(Long id) throws BeerNotFoundException {
-		return beerRepository.findById(id).orElseThrow(
-				() -> new BeerNotFoundException(id));
-	}
 
 	public BeerDTO withdrawBeersFromStock(Long id, int quantityToDecrement) throws BeerNotFoundException, BeerStockExceededException {
 		/*
@@ -106,4 +94,26 @@ public class BeerService {
 		}
 		throw new BeerStockExceededException(id, quantityToDecrement);
 	}
+
+	public BeerDTO updateBeer(Long id, BeerDTO beerDTO) throws BeerNotFoundException {
+		Beer ifExists = checkIfExists(id);
+		Beer beer = beerMapper.toModel(beerDTO);
+		beer.setId(ifExists.getId());
+		Beer savedBeer = beerRepository.save(beer);
+		return beerMapper.toDTO(savedBeer);
+	}
+	
+	private void checkIfThereIsaRecord(String nameBeer) throws BeerAlreadyRegisteredException {
+		Optional<Beer> optSavedBeer = beerRepository.findByName(nameBeer);
+		if(optSavedBeer.isPresent()){
+			throw new BeerAlreadyRegisteredException(nameBeer);
+		}
+	}
+	
+	private Beer checkIfExists(Long id) throws BeerNotFoundException {
+		return beerRepository.findById(id).orElseThrow(
+				() -> new BeerNotFoundException(id));
+	}
+
+
 }

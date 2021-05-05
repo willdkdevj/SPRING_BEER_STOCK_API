@@ -41,5 +41,11 @@ public interface BeerControllerDocs {
 			@ApiResponse(code = 200, message = "Beer catalog successfully returned")
 	})
 	List<BeerDTO> listBeers();
-	
+
+	@ApiOperation(value = "Operation for beer update")
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Beer successfully updated"),
+			@ApiResponse(code = 404, message = "Could not find the beer reported to update")
+	})
+	BeerDTO updateBeer(Long id, BeerDTO beerDTO) throws BeerNotFoundException;
 }
